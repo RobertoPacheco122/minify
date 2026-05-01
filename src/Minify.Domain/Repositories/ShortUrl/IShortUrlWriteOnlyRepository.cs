@@ -4,5 +4,5 @@ namespace Minify.Domain.Repositories.ShortUrl;
 
 public interface IShortUrlWriteOnlyRepository
 {
-    Task Add(ShortUrlEntity entity);
+    Task Add(ShortUrlEntity entity, CancellationToken cancellationToken = default);
 }
