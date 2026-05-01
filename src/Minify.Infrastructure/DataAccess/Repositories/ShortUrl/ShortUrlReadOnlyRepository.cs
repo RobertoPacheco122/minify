@@ -8,6 +8,7 @@ public class ShortUrlReadOnlyRepository(MinifyDbContext dbContext) : IShortUrlRe
 {
     public async Task<ShortUrlEntity?> GetByShortCode(string shortCode, CancellationToken cancellationToken = default)
     {
-        return await dbContext.ShortUrls.FirstOrDefaultAsync(url => url.ShortenCode.Equals(shortCode), cancellationToken);
+        return await dbContext.ShortUrls.AsNoTracking()
+            .FirstOrDefaultAsync(url => url.ShortenCode.Equals(shortCode), cancellationToken);
     }
 }
