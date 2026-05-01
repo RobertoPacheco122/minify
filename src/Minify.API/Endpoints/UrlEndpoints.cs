@@ -12,7 +12,7 @@ public static class UrlEndpoints
             {
                 var result = await useCase.Execute(request, cancellationToken);
 
-                return Results.Created($"/{result.ShortenCode}", result);
+                return Results.Created($"/{result.Data.ShortenCode}", result);
             });
 
         return app;
