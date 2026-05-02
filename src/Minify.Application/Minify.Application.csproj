@@ -11,4 +11,9 @@
       <ProjectReference Include="..\Minify.Domain\Minify.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="FluentValidation" Version="12.1.1" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.7" />
+    </ItemGroup>
+
 </Project>
