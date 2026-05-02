@@ -1,3 +1,4 @@
+using Minify.Application.Services.ShortCode;
 using Minify.Communication.Requests.Url;
 using Minify.Communication.Responses;
 using Minify.Communication.Responses.Url;
@@ -7,7 +8,10 @@ using Minify.Domain.Repositories.ShortUrl;
 
 namespace Minify.Application.UseCases.Url.ShortenUrl;
 
-public class ShortenUrlUseCase(IShortUrlWriteOnlyRepository writeOnlyRepository, IUnitOfWork unitOfWork)
+public class ShortenUrlUseCase(
+    IShortUrlWriteOnlyRepository writeOnlyRepository,
+    IShortCodeGenerator shortCodeGenerator,
+    IUnitOfWork unitOfWork)
     : IShortenUrlUseCase
 {
     public async Task<ResultJson<ResponseShortenUrlJson>> Execute(RequestShortenUrlJson request,
@@ -17,10 +21,12 @@ public class ShortenUrlUseCase(IShortUrlWriteOnlyRepository writeOnlyRepository,
 
         if (!validationResult.IsSuccess)
             return validationResult;
+        
+        var shortenCode = await shortCodeGenerator.Generate(cancellationToken);
 
         var payload = new ShortUrlEntity
         {
-            ShortenCode = "abc123",
+            ShortenCode = shortenCode,
             ExpiresAt = request.ExpiresAt,
             LongUrl = request.Url
         };
