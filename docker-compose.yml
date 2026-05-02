@@ -9,8 +9,13 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__Postgres: >-
         Host=db;Port=5432;Database=minify;Username=minify;Password=minify
+      ConnectionStrings__Redis: redis:6379
+      Hashids__Salt: G5rS0r#O=4PD')|+gp<fMbsr22#C%qp_?FnuGPgp4uYBOSnM
+      Hashids__MinLength: 4
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     restart: unless-stopped
 
@@ -32,5 +37,20 @@ services:
       start_period: 10s
     restart: unless-stopped
     
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
+    
 volumes:
   postgres_data:
+  redis_data:
