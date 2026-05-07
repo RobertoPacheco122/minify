@@ -80,6 +80,43 @@ Database migrations are applied automatically when the application starts.
 
 ---
 
+## Tests
+
+The project has three test projects, all using xUnit and FluentAssertions:
+
+| Project | What it covers |
+|---------|----------------|
+| `UseCases.Test` | Unit tests for use cases — all dependencies mocked |
+| `Validators.Test` | Unit tests for FluentValidation validators in isolation |
+| `WebApi.Test` | Integration tests for HTTP endpoints — spins up real Postgres and Redis via Testcontainers |
+
+### Running all tests
+
+```bash
+dotnet test
+```
+
+### Running a specific project
+
+```bash
+dotnet test tests/UseCases.Test
+dotnet test tests/Validators.Test
+dotnet test tests/WebApi.Test
+```
+
+### Integration tests (WebApi.Test)
+
+`WebApi.Test` uses [Testcontainers](https://dotnet.testcontainers.org/) to start throwaway Postgres and Redis containers automatically — no local database or Redis instance required. Docker must be running.
+
+`MinifyApiFixture` (`IAsyncLifetime`) handles the full lifecycle:
+
+1. Starts both containers in parallel.
+2. Wires them into a `CustomWebApplicationFactory` (replacing the production connection strings and removing hosted services).
+3. Applies EF migrations and seeds the Redis short-code counter.
+4. Tears everything down after the test class completes.
+
+---
+
 ## Architecture
 
 The project follows Clean Architecture, organized into four layers with strict dependency rules (outer layers depend on inner ones, never the reverse):

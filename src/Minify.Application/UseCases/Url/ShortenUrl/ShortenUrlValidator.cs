@@ -9,7 +9,7 @@ public class ShortenUrlValidator : AbstractValidator<RequestShortenUrlJson>
     {
         RuleFor(request => request.Url)
             .NotEmpty().WithMessage("Property 'url' is required.")
-            .Must(BeAnAbsoluteHttpUrl).WithMessage("URL must be a valid absolute http or https URL.");
+            .Must(BeAnAbsoluteHttpUrl).WithMessage("Property 'url' must be a valid absolute http or https URL.");
         
         RuleFor(request => request.ExpiresAt)
             .Must(date => date > DateTime.UtcNow).WithMessage("Property 'expiresAt' must be a date in the future.");

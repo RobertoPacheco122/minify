@@ -20,3 +20,5 @@ app.UseHttpsRedirection();
 app.MapUrlEndpoints();
 
 app.Run();
+
+public partial class Program { }
