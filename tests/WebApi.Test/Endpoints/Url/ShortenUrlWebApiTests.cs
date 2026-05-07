@@ -24,7 +24,7 @@ public class ShortenUrlWebApiTests(MinifyApiFixture fixture) : IClassFixture<Min
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var body = await response.Content.ReadFromJsonAsync<ShortenUrlResponse>(JsonOptions);
-        
+
         body.Should().NotBeNull();
         body.IsSuccess.Should().BeTrue();
         body.Data.Should().NotBeNull();
@@ -33,9 +33,10 @@ public class ShortenUrlWebApiTests(MinifyApiFixture fixture) : IClassFixture<Min
 
         using var scope = fixture.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<MinifyDbContext>();
-        
-        var shortUrlEntity = await dbContext.ShortUrls.AsNoTracking().FirstAsync(u => u.ShortenCode == body.Data.ShortenCode);
-        
+
+        var shortUrlEntity =
+            await dbContext.ShortUrls.AsNoTracking().FirstAsync(u => u.ShortenCode == body.Data.ShortenCode);
+
         shortUrlEntity.Should().NotBeNull();
         shortUrlEntity.LongUrl.Should().Be(request.Url);
         shortUrlEntity.ExpiresAt.Should().BeCloseTo(request.ExpiresAt, TimeSpan.FromSeconds(1));
@@ -49,9 +50,9 @@ public class ShortenUrlWebApiTests(MinifyApiFixture fixture) : IClassFixture<Min
         var response = await fixture.HttpClient.PostAsJsonAsync("/api/shorten-url", request);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        
+
         var body = await response.Content.ReadFromJsonAsync<ShortenUrlResponse>(JsonOptions);
-        
+
         body.Should().NotBeNull();
         body.IsSuccess.Should().BeFalse();
         body.Errors.Should().Contain("Property 'url' must be a valid absolute http or https URL.");
@@ -65,9 +66,9 @@ public class ShortenUrlWebApiTests(MinifyApiFixture fixture) : IClassFixture<Min
         var response = await fixture.HttpClient.PostAsJsonAsync("/api/shorten-url", request);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        
+
         var body = await response.Content.ReadFromJsonAsync<ShortenUrlResponse>(JsonOptions);
-        
+
         body.Should().NotBeNull();
         body.IsSuccess.Should().BeFalse();
         body.Errors.Should().Contain("Property 'expiresAt' must be a date in the future.");
