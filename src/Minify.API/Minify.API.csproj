@@ -18,7 +18,6 @@
       <ProjectReference Include="..\Minify.Application\Minify.Application.csproj" />
       <ProjectReference Include="..\Minify.Communication\Minify.Communication.csproj" />
       <ProjectReference Include="..\Minify.Infrastructure\Minify.Infrastructure.csproj" />
-      <ProjectReference Include="..\Minify.Messaging\Minify.Messaging.csproj" />
     </ItemGroup>
 
 </Project>
