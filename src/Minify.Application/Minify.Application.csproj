@@ -9,11 +9,13 @@
     <ItemGroup>
       <ProjectReference Include="..\Minify.Communication\Minify.Communication.csproj" />
       <ProjectReference Include="..\Minify.Domain\Minify.Domain.csproj" />
+      <ProjectReference Include="..\Minify.Messaging\Minify.Messaging.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="FluentValidation" Version="12.1.1" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.7" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.7" />
     </ItemGroup>
 
 </Project>

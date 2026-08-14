@@ -10,12 +10,17 @@ services:
       ConnectionStrings__Postgres: >-
         Host=db;Port=5432;Database=minify;Username=minify;Password=minify
       ConnectionStrings__Redis: redis:6379
+      ConnectionStrings__RabbitMQ: amqp://minify:minify@rabbitmq:5672
       Hashids__Salt: G5rS0r#O=4PD')|+gp<fMbsr22#C%qp_?FnuGPgp4uYBOSnM
       Hashids__MinLength: 4
+      Geolocation__ApiUrl: http://ip-api.com/
+      Geolocation__TimeoutMs: 500
     depends_on:
       db:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     restart: unless-stopped
 
@@ -36,7 +41,7 @@ services:
       retries: 5
       start_period: 10s
     restart: unless-stopped
-    
+
   redis:
     image: redis:7-alpine
     ports:
@@ -44,13 +49,32 @@ services:
     volumes:
       - redis_data:/data
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 5s
     restart: unless-stopped
-    
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: minify
+      RABBITMQ_DEFAULT_PASS: minify
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
+
 volumes:
   postgres_data:
   redis_data:
+  rabbitmq_data:

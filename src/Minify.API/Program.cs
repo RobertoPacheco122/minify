@@ -18,6 +18,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapUrlEndpoints();
+app.MapAnalyticsEndpoints();
 
 app.Run();
 
