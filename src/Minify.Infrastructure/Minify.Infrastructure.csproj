@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Minify.Application\Minify.Application.csproj" />
       <ProjectReference Include="..\Minify.Domain\Minify.Domain.csproj" />
+      <ProjectReference Include="..\Minify.Messaging\Minify.Messaging.csproj" />
     </ItemGroup>
 
     <ItemGroup>
